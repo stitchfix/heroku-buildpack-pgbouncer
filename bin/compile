@@ -10,15 +10,6 @@ set -e
 # clean up leaking environment
 unset GIT_DIR
 
-# config
-PGBOUNCER_VERSION="1.5.4-heroku"
-if [ "$STACK" == "cedar-14" ]; then
-  STUNNEL_VERSION="5.08"
-else
-  STUNNEL_VERSION="5.02"
-fi
-S3_BUCKET="gregburek-buildpack-pgbouncer"
-
 # parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -39,44 +30,34 @@ function indent() {
 }
 
 function package_download() {
-  engine="$1"
-  version="$2"
-  location="$3"
-  stack="$4"
+  location="$1"
 
   mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/$stack/$engine-$version.tgz"
-  curl $package -s -o - | tar xzf - -C $location
+  package="https://github.com/BetterWorks/heroku-buildpack-pgbouncer/raw/master/support/pgbouncer-1.7rc1.tgz"
+  curl $package -L -s -o - | tar xzf - -C $location
 }
-
-echo "Using pgbouncer version: ${PGBOUNCER_VERSION}" | indent
-echo "Using stunnel version: ${STUNNEL_VERSION}" | indent
-echo "Using stack version: ${STACK}" | indent
 
 # vendor directories
 VENDORED_PGBOUNCER="vendor/pgbouncer"
-VENDORED_STUNNEL="vendor/stunnel"
 
 # vendor pgbouncer into the slug
 PATH="$BUILD_DIR/$VENDORED_PGBOUNCER/bin:$PATH"
 echo "-----> Fetching and vendoring pgbouncer into slug"
 mkdir -p "$BUILD_DIR/$VENDORED_PGBOUNCER"
-package_download "pgbouncer" "${PGBOUNCER_VERSION}" "${BUILD_DIR}/${VENDORED_PGBOUNCER}" "${STACK}"
+package_download "${BUILD_DIR}/${VENDORED_PGBOUNCER}"
 
-# vendor stunnel into the slug
-PATH="$BUILD_DIR/$VENDORED_STUNNEL/bin:$PATH"
-echo "-----> Fetching and vendoring stunnel into slug"
-mkdir -p "$BUILD_DIR/$VENDORED_STUNNEL"
-package_download "stunnel" "${STUNNEL_VERSION}" "${BUILD_DIR}/${VENDORED_STUNNEL}" "${STACK}"
+chmod +x "$BUILD_DIR/$VENDORED_PGBOUNCER/bin/pgbouncer"
+PGBOUNCER_VERSION=`"$BUILD_DIR/$VENDORED_PGBOUNCER/bin/pgbouncer" --version`
+echo "${PGBOUNCER_VERSION}" | indent
 
 echo "-----> Moving the configuration generation script into app/bin"
 mkdir -p $BUILD_DIR/bin
 cp "$BUILDPACK_DIR/bin/gen-pgbouncer-conf.sh" $BUILD_DIR/bin
 chmod +x $BUILD_DIR/bin/gen-pgbouncer-conf.sh
 
-echo "-----> Moving the start-pgbouncer-stunnel script into app/bin"
+echo "-----> Moving the start-pgbouncer script into app/bin"
 mkdir -p $BUILD_DIR/bin
-cp "$BUILDPACK_DIR/bin/start-pgbouncer-stunnel" $BUILD_DIR/bin/
-chmod +x $BUILD_DIR/bin/start-pgbouncer-stunnel
+cp "$BUILDPACK_DIR/bin/start-pgbouncer" $BUILD_DIR/bin/
+chmod +x $BUILD_DIR/bin/start-pgbouncer
 
-echo "-----> pgbouncer/stunnel done"
+echo "-----> pgbouncer done"

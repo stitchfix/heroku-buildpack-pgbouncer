@@ -35,7 +35,9 @@ log_connections = ${PGBOUNCER_LOG_CONNECTIONS:-1}
 log_disconnections = ${PGBOUNCER_LOG_DISCONNECTIONS:-1}
 log_pooler_errors = ${PGBOUNCER_LOG_POOLER_ERRORS:-1}
 stats_period = ${PGBOUNCER_STATS_PERIOD:-120}
-server_tls_sslmode = allow
+pkt_buf = ${PGBOUNCER_PKT_BUF:-4096}
+sbuf_loopcnt = ${PGBOUNCER_SBUF_LOOPCNT:-20}
+server_tls_sslmode = ${PGBOUNCER_SERVER_TLS_SSLMODE:-prefer}
 [databases]
 EOFEOF
 

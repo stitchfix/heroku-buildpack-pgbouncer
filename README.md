@@ -146,5 +146,9 @@ and [stunnel](http://linux.die.net/man/8/stunnel) configurations to see what set
 - `ENABLE_STUNNEL_AMAZON_RDS_FIX` Default is unset. Set this var if you are connecting to an Amazon RDS instance of postgres.
  Adds `options = NO_TICKET` which is documented to make stunnel work correctly after a dyno resumes from sleep. Otherwise, the dyno will lose connectivity to RDS.
 - `PGBOUNCER_MAX_USER_CONNECTIONS` Default is 50. Set this var if you need to allow more than this many connections per-user to a database.
+- `PGBOUNCER_IDLE_TRANSACTION_TIMEOUT` If client has been in “idle in transaction” state longer, it will be disconnected. [seconds]
+- `PGBOUNCER_QUERY_TIMEOUT` Queries running longer than that are canceled. This should be used only with slightly smaller server-side statement_timeout, to apply only for network problems. [seconds]
+- `PGBOUNCER_LOG_VERBOSE` Increase verbosity. Mirrors “-v” switch on command line. Using “-v -v” on command line is same as verbose=2 in config.
+- `PGBOUNCER_RESET_QUERY_ALWAYS` Whether server_reset_query should be run in all pooling modes. When this setting is off (default), the server_reset_query will be run only in pools that are in sessions-pooling mode. Connections in transaction-pooling mode should not have any need for reset query.
 
 For more info, see [CONTRIBUTING.md](CONTRIBUTING.md)

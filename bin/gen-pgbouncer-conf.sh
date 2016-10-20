@@ -39,6 +39,10 @@ stats_period = ${PGBOUNCER_STATS_PERIOD:-120}
 pkt_buf = ${PGBOUNCER_PKT_BUF:-4096}
 sbuf_loopcnt = ${PGBOUNCER_SBUF_LOOPCNT:-20}
 server_tls_sslmode = ${PGBOUNCER_SERVER_TLS_SSLMODE:-prefer}
+idle_transaction_timeout = ${PGBOUNCER_IDLE_TRANSACTION_TIMEOUT:-0.0}
+query_timeout = ${PGBOUNCER_QUERY_TIMEOUT:-0.0}
+verbose = ${PGBOUNCER_LOG_VERBOSE:-0}
+server_reset_query_always = ${PGBOUNCER_RESET_QUERY_ALWAYS:-0}
 [databases]
 EOFEOF
 

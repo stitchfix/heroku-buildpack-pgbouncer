@@ -30,6 +30,7 @@ min_pool_size = ${PGBOUNCER_MIN_POOL_SIZE:-0}
 reserve_pool_size = ${PGBOUNCER_RESERVE_POOL_SIZE:-1}
 reserve_pool_timeout = ${PGBOUNCER_RESERVE_POOL_TIMEOUT:-5.0}
 max_user_connections = ${PGBOUNCER_MAX_USER_CONNECTIONS:-50}
+max_db_connections = ${PGBOUNCER_MAX_DB_CONNECTIONS:--1}
 server_lifetime = ${PGBOUNCER_SERVER_LIFETIME:-1800}
 server_idle_timeout = ${PGBOUNCER_SERVER_IDLE_TIMEOUT:-300}
 log_connections = ${PGBOUNCER_LOG_CONNECTIONS:-0}

@@ -3,6 +3,7 @@
 POSTGRES_URLS=${PGBOUNCER_URLS:-DATABASE_URL}
 POOL_MODE=${PGBOUNCER_POOL_MODE:-transaction}
 SERVER_RESET_QUERY=${PGBOUNCER_SERVER_RESET_QUERY}
+CONNECT_QUERY="${PGBOUNCER_CONNECT_QUERY:-SELECT 1}"
 n=1
 
 # if the SERVER_RESET_QUERY and pool mode is session, pgbouncer recommends DISCARD ALL be the default
@@ -65,7 +66,7 @@ do
 EOFEOF
 
   cat >> /app/vendor/pgbouncer/pgbouncer.ini << EOFEOF
-$CLIENT_DB_NAME= host=$DB_HOST port=$DB_PORT dbname=$DB_NAME
+$CLIENT_DB_NAME= host=$DB_HOST port=$DB_PORT dbname=$DB_NAME connect_query="${CONNECT_QUERY}"
 EOFEOF
 
   let "n += 1"

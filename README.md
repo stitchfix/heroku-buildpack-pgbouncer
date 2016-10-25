@@ -146,5 +146,6 @@ and [stunnel](http://linux.die.net/man/8/stunnel) configurations to see what set
 - `ENABLE_STUNNEL_AMAZON_RDS_FIX` Default is unset. Set this var if you are connecting to an Amazon RDS instance of postgres.
  Adds `options = NO_TICKET` which is documented to make stunnel work correctly after a dyno resumes from sleep. Otherwise, the dyno will lose connectivity to RDS.
 - `PGBOUNCER_MAX_USER_CONNECTIONS` Default is 50. Set this var if you need to allow more than this many connections per-user to a database.
+- `PGBOUNCER_MAX_DB_CONNECTIONS` Default is unlimited. Set this var if you need to limit the total available connections per database.
 
 For more info, see [CONTRIBUTING.md](CONTRIBUTING.md)
